@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Complaint | RoadNetra</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <a class="brand" href="index.html"><b>RN</b><span>RoadNetra<small>See. Report. Improve.</small></span></a>
+        <nav>
+            <a href="index.html">Home</a><a href="report.html">Report Damage</a>
+            <a href="complaints.html">Complaints</a><a class="active" href="track.html">Track</a><a href="dashboard.html">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="page tracker">
+        <p class="eyebrow">COMPLAINT TRACKER</p>
+        <h1>Where is your report now?</h1>
+        <p class="muted">Enter the RoadNetra complaint ID received after submission.</p>
+
+        <form id="trackForm" class="track-form">
+            <input id="trackId" required placeholder="e.g. RN-2026-A7K29M">
+            <button class="btn dark">Track report →</button>
+        </form>
+
+        <div id="trackResult"></div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

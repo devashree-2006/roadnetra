@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Damage | RoadNetra</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <a class="brand" href="index.html"><b>RN</b><span>RoadNetra<small>See. Report. Improve.</small></span></a>
+        <nav>
+            <a href="index.html">Home</a><a class="active" href="report.html">Report Damage</a>
+            <a href="complaints.html">Complaints</a><a href="track.html">Track</a><a href="dashboard.html">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <p class="eyebrow">CITIZEN REPORT</p>
+        <h1>Tell us what needs attention.</h1>
+        <p class="muted">Submit the details below and receive a complaint ID for tracking.</p>
+
+        <form id="reportForm" class="form-grid">
+            <section class="card">
+                <h2>What did you see?</h2>
+
+                <label class="upload">
+          <input id="photo" type="file" accept="image/*">
+          <img id="preview" alt="Preview">
+          <span id="uploadText">＋ Add a photo<br><small>JPG, PNG or WEBP — optional</small></span>
+        </label>
+
+                <label>Damage type
+          <select name="type">
+            <option>Pothole</option>
+            <option>Cracked road</option>
+            <option>Waterlogging</option>
+            <option>Damaged road surface</option>
+            <option>Other hazard</option>
+          </select>
+        </label>
+
+                <label>Severity
+          <select name="severity">
+            <option>Low</option><option selected>Medium</option><option>High</option>
+          </select>
+        </label>
+
+                <label>Description
+          <textarea name="description" required placeholder="Describe the road damage..."></textarea>
+        </label>
+            </section>
+
+            <section class="card">
+                <h2>Where is it?</h2>
+
+                <label>Area / landmark
+          <input name="location" required placeholder="e.g. Near City Library, MG Road">
+        </label>
+
+                <label>City
+          <input name="city" required placeholder="e.g. Bengaluru">
+        </label>
+
+                <label>PIN code
+          <input name="pin" required pattern="[0-9]{6}" placeholder="6-digit PIN code">
+        </label>
+
+                <div class="note">📍 Use a nearby landmark so the report is easy to find.</div>
+                <button class="btn dark wide">Submit report →</button>
+            </section>
+        </form>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

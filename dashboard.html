@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | RoadNetra</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <a class="brand" href="index.html"><b>RN</b><span>RoadNetra<small>See. Report. Improve.</small></span></a>
+        <nav>
+            <a href="index.html">Home</a><a href="report.html">Report Damage</a>
+            <a href="complaints.html">Complaints</a><a href="track.html">Track</a><a class="active" href="dashboard.html">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <div class="title-row">
+            <div>
+                <p class="eyebrow">PUBLIC OVERVIEW</p>
+                <h1>Road safety, at a glance.</h1>
+                <p class="muted">A live view of community reports.</p>
+            </div>
+            <button id="reset" class="simple-btn">Reset demo data</button>
+        </div>
+
+        <div id="dashCards" class="dash-cards"></div>
+
+        <div class="dashboard-grid">
+            <section class="card">
+                <h2>Resolution progress</h2>
+                <div id="bars"></div>
+            </section>
+            <section class="card">
+                <h2>Recent reports</h2>
+                <div id="recent"></div>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
