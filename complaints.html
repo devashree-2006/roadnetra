@@ -9,11 +9,19 @@
 </head>
 
 <body>
+
     <header>
-        <a class="brand" href="index.html"><b>RN</b><span>RoadNetra<small>See. Report. Improve.</small></span></a>
+        <a class="brand" href="index.html">
+            <b>RN</b>
+            <span>RoadNetra<small>See. Report. Improve.</small></span>
+        </a>
+
         <nav>
-            <a href="index.html">Home</a><a href="report.html">Report Damage</a>
-            <a class="active" href="complaints.html">Complaints</a><a href="track.html">Track</a><a href="dashboard.html">Dashboard</a>
+            <a href="index.html">Home</a>
+            <a href="report.html">Report Damage</a>
+            <a class="active" href="complaints.html">Complaints</a>
+            <a href="track.html">Track</a>
+            <a href="dashboard.html">Dashboard</a>
         </nav>
     </header>
 
@@ -22,13 +30,17 @@
             <div>
                 <p class="eyebrow">COMMUNITY REPORTS</p>
                 <h1>Road issues in your city.</h1>
-                <p class="muted">Search reports and update their progress for the demo.</p>
+                <p class="muted">Search road-damage reports and track their status.</p>
             </div>
-            <a class="btn dark" href="report.html">＋ New report</a>
+
+            <div id="adminAction"></div>
         </div>
+
+        <div id="adminNotice"></div>
 
         <div class="filters">
             <input id="search" placeholder="Search complaint ID, location, city...">
+
             <select id="filter">
         <option value="All">All statuses</option>
         <option>Pending</option>

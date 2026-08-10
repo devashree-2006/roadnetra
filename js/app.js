@@ -1,4 +1,8 @@
 const KEY = "roadnetra_reports";
+const ADMIN_KEY = "roadnetra_admin_session";
+
+const ADMIN_USERNAME = "roadnetra_admin";
+const ADMIN_PASSWORD = "admin123";
 
 const demoReports = [{
         id: "RN-2026-A7K29M",
@@ -39,10 +43,12 @@ const statuses = ["Pending", "Under Inspection", "Work Started", "Completed"];
 
 function reports() {
     let data = JSON.parse(localStorage.getItem(KEY));
+
     if (!data) {
         data = demoReports;
         localStorage.setItem(KEY, JSON.stringify(data));
     }
+
     return data;
 }
 
@@ -50,19 +56,29 @@ function save(data) {
     localStorage.setItem(KEY, JSON.stringify(data));
 }
 
+function isAdmin() {
+    return sessionStorage.getItem(ADMIN_KEY) === "true";
+}
+
+function logout() {
+    sessionStorage.removeItem(ADMIN_KEY);
+    window.location.reload();
+}
+
 function tag(text) {
-    return `<span class="${text.toLowerCase()}">${text}</span>`;
+    return `<span class="${text.toLowerCase().replaceAll(" ", "-")}">${text}</span>`;
 }
 
 function updateHome() {
     const data = reports();
-    const total = document.getElementById("total");
-    const pending = document.getElementById("pending");
-    const completed = document.getElementById("completed");
 
-    if (total) total.textContent = data.length;
-    if (pending) pending.textContent = data.filter(x => x.status === "Pending").length;
-    if (completed) completed.textContent = data.filter(x => x.status === "Completed").length;
+    if (document.getElementById("total")) {
+        document.getElementById("total").textContent = data.length;
+        document.getElementById("pending").textContent =
+            data.filter(item => item.status === "Pending").length;
+        document.getElementById("completed").textContent =
+            data.filter(item => item.status === "Completed").length;
+    }
 }
 
 function renderComplaints() {
@@ -71,38 +87,87 @@ function renderComplaints() {
 
     const search = document.getElementById("search");
     const filter = document.getElementById("filter");
+    const action = document.getElementById("adminAction");
+    const notice = document.getElementById("adminNotice");
+
+    if (isAdmin()) {
+        action.innerHTML = `<button class="simple-btn" id="logoutButton">Sign out</button>`;
+
+        notice.innerHTML = `
+      <div class="admin-notice">
+        ✓ Admin session active. You can update complaint statuses.
+      </div>
+    `;
+
+        document.getElementById("logoutButton").onclick = logout;
+    } else {
+        action.innerHTML = `<a class="btn dark" href="login.html">Admin login</a>`;
+
+        notice.innerHTML = `
+      <div class="admin-notice">
+        Complaint status updates are restricted to municipal administrators.
+        <a href="login.html">Sign in →</a>
+      </div>
+    `;
+    }
 
     function draw() {
         const word = search.value.toLowerCase();
-        const status = filter.value;
+        const selectedStatus = filter.value;
 
         const data = reports().filter(item => {
-            const matchesText = Object.values(item).join(" ").toLowerCase().includes(word);
-            const matchesStatus = status === "All" || item.status === status;
+            const matchesText = Object.values(item)
+                .join(" ")
+                .toLowerCase()
+                .includes(word);
+
+            const matchesStatus =
+                selectedStatus === "All" || item.status === selectedStatus;
+
             return matchesText && matchesStatus;
         });
 
-        list.innerHTML = data.length ? data.map(item => `
-      <article class="complaint">
-        <div>
-          <h3>${item.type} <span class="id">${item.id}</span></h3>
-          <p>${item.location}, ${item.city}</p>
-          <p class="small">${tag(item.severity)} &nbsp; · &nbsp; Reported ${item.date}</p>
-        </div>
-        <div>
-          ${tag(item.status)}
-          <br>
-          <select class="status-select" data-id="${item.id}">
-            ${statuses.map(s => `<option ${s === item.status ? "selected" : ""}>${s}</option>`).join("")}
-          </select>
-        </div>
-      </article>
-    `).join("") : `<div class="empty">No reports found.</div>`;
+        list.innerHTML = data.length ?
+            data.map(item => {
+                    const adminControls = isAdmin() ?
+                        `
+              <select class="status-select" data-id="${item.id}">
+                ${statuses.map(status => `
+                  <option ${status === item.status ? "selected" : ""}>
+                    ${status}
+                  </option>
+                `).join("")}
+              </select>
+            `
+            : "";
+
+          return `
+            <article class="complaint">
+              <div>
+                <h3>${item.type} <span class="id">${item.id}</span></h3>
+                <p>${item.location}, ${item.city}</p>
+                <p class="small">
+                  ${tag(item.severity)} · Reported ${item.date}
+                </p>
+              </div>
+
+              <div>
+                ${tag(item.status)}
+                <br>
+                ${adminControls}
+              </div>
+            </article>
+          `;
+        }).join("")
+      : `<div class="empty">No reports found.</div>`;
 
     document.querySelectorAll(".status-select").forEach(select => {
       select.onchange = () => {
+        if (!isAdmin()) return;
+
         const data = reports();
-        const item = data.find(x => x.id === select.dataset.id);
+        const item = data.find(report => report.id === select.dataset.id);
+
         item.status = select.value;
         save(data);
         draw();
@@ -128,11 +193,13 @@ function setupReportForm() {
     if (!file) return;
 
     const reader = new FileReader();
+
     reader.onload = event => {
       preview.src = event.target.result;
       preview.style.display = "block";
       uploadText.style.display = "none";
     };
+
     reader.readAsDataURL(file);
   };
 
@@ -140,10 +207,14 @@ function setupReportForm() {
     event.preventDefault();
 
     const formData = new FormData(form);
-    const id = "RN-" + new Date().getFullYear() + "-" +
+
+    const id =
+      "RN-" +
+      new Date().getFullYear() +
+      "-" +
       Math.random().toString(36).substring(2, 8).toUpperCase();
 
-    const item = {
+    const report = {
       id: id,
       type: formData.get("type"),
       severity: formData.get("severity"),
@@ -156,10 +227,10 @@ function setupReportForm() {
     };
 
     const data = reports();
-    data.unshift(item);
+    data.unshift(report);
     save(data);
 
-    alert("Report submitted successfully!\nYour Complaint ID: " + id);
+    alert("Report submitted successfully!\nComplaint ID: " + id);
     window.location.href = "track.html?id=" + id;
   };
 }
@@ -170,31 +241,37 @@ function setupTracker() {
   if (!form) return;
 
   function track(id) {
-    const item = reports().find(x => x.id.toLowerCase() === id.toLowerCase().trim());
+    const item = reports().find(
+      report => report.id.toLowerCase() === id.trim().toLowerCase()
+    );
 
     if (!item) {
-      result.innerHTML = `<div class="empty">Complaint ID not found. Please check and try again.</div>`;
+      result.innerHTML =
+        `<div class="empty">Complaint ID not found. Please try again.</div>`;
       return;
     }
 
-    const current = statuses.indexOf(item.status);
+    const currentStep = statuses.indexOf(item.status);
 
     result.innerHTML = `
       <section class="card track-card">
         <p class="id">${item.id}</p>
         <h2>${item.type}</h2>
         <p class="muted">${item.location}, ${item.city}</p>
-        <p>${tag(item.status)} &nbsp; ${tag(item.severity)}</p>
+        <p>${tag(item.status)} ${tag(item.severity)}</p>
 
         <div class="progress">
           ${statuses.map((status, index) => `
-            <div class="${index <= current ? "done" : ""}">
+            <div class="${index <= currentStep ? "done" : ""}">
               <i></i>${status}
             </div>
           `).join("")}
         </div>
 
-        <p class="small">Reported on ${item.date}<br>${item.description}</p>
+        <p class="small">
+          Reported on ${item.date}<br>
+          ${item.description}
+        </p>
       </section>
     `;
   }
@@ -205,6 +282,7 @@ function setupTracker() {
   };
 
   const id = new URLSearchParams(window.location.search).get("id");
+
   if (id) {
     document.getElementById("trackId").value = id;
     track(id);
@@ -216,7 +294,7 @@ function dashboard() {
   if (!cards) return;
 
   function count(status) {
-    return reports().filter(x => x.status === status).length;
+    return reports().filter(item => item.status === status).length;
   }
 
   function draw() {
@@ -258,8 +336,33 @@ function dashboard() {
   };
 }
 
+function setupLogin() {
+  const form = document.getElementById("loginForm");
+  if (!form) return;
+
+  if (isAdmin()) {
+    window.location.href = "complaints.html";
+  }
+
+  form.onsubmit = event => {
+    event.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    const error = document.getElementById("loginError");
+
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      sessionStorage.setItem(ADMIN_KEY, "true");
+      window.location.href = "complaints.html";
+    } else {
+      error.textContent = "Incorrect username or password.";
+    }
+  };
+}
+
 updateHome();
 renderComplaints();
 setupReportForm();
 setupTracker();
 dashboard();
+setupLogin();

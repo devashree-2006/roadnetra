@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | RoadNetra</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <a class="brand" href="index.html">
+            <b>RN</b>
+            <span>RoadNetra<small>See. Report. Improve.</small></span>
+        </a>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="report.html">Report Damage</a>
+            <a href="complaints.html">Complaints</a>
+            <a href="track.html">Track</a>
+            <a href="dashboard.html">Dashboard</a>
+        </nav>
+    </header>
+
+    <main class="page login-page">
+        <section class="card login-card">
+            <p class="eyebrow">AUTHORIZED ACCESS ONLY</p>
+            <h1>Municipal Admin Login</h1>
+            <p class="muted">
+                Only authorized administrators can update complaint statuses.
+            </p>
+
+            <form id="loginForm">
+                <label>
+          Username
+          <input id="username" type="text" required placeholder="Enter username">
+        </label>
+
+                <label>
+          Password
+          <input id="password" type="password" required placeholder="Enter password">
+        </label>
+
+                <p id="loginError" class="login-error"></p>
+
+                <button type="submit" class="btn dark wide">
+          Sign in →
+        </button>
+            </form>
+
+            <div class="demo-box">
+                <p>Username: <code>roadnetra_admin</code></p>
+                <p>Password: <code>rn_admin</code></p>
+            </div>
+
+            <a class="back-link" href="complaints.html">← Back to complaints</a>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
