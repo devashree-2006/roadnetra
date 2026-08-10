@@ -257,9 +257,23 @@ function renderComplaints() {
                             </h3>
 
                             <p>
-                                ${item.location},
-                                ${item.city}
-                            </p>
+    ${item.location},
+    ${item.city}
+</p>
+
+${
+    item.latitude && item.longitude
+    ? `
+        <a
+            href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"
+            target="_blank"
+            class="map-link"
+        >
+            📍 View exact location on map
+        </a>
+      `
+    : ""
+}
 
                             <p class="small">
     ${tag(item.severity)}
@@ -922,8 +936,21 @@ function dashboard() {
 
     function draw() {
 
-        const data =
-            reports();
+    const data =
+        reports();
+
+    // Sort reports by priority
+    const priorityOrder = {
+        "Critical": 3,
+        "High": 2,
+        "Normal": 1
+    };
+
+    const sortedData = [...data].sort(
+        (a, b) =>
+            (priorityOrder[b.priority || getPriority(b.severity, b.confirmations || 1)] || 0) -
+            (priorityOrder[a.priority || getPriority(a.severity, a.confirmations || 1)] || 0)
+    );
 
 
         cards.innerHTML = `
@@ -953,7 +980,45 @@ function dashboard() {
                 </b>
             </article>
         `;
+          const priorityCount = {
+    Critical: data.filter(
+        item => (item.priority || getPriority(item.severity, item.confirmations || 1)) === "Critical"
+    ).length,
 
+    High: data.filter(
+        item => (item.priority || getPriority(item.severity, item.confirmations || 1)) === "High"
+    ).length,
+
+    Normal: data.filter(
+        item => (item.priority || getPriority(item.severity, item.confirmations || 1)) === "Normal"
+    ).length
+};
+
+const priorityBox =
+    document.getElementById("priorityOverview");
+
+if (priorityBox) {
+
+    priorityBox.innerHTML = `
+        <div class="priority-item critical">
+            <strong>${priorityCount.Critical}</strong>
+            <span>Critical</span>
+            <small>Immediate attention</small>
+        </div>
+
+        <div class="priority-item high">
+            <strong>${priorityCount.High}</strong>
+            <span>High</span>
+            <small>Needs attention</small>
+        </div>
+
+        <div class="priority-item normal">
+            <strong>${priorityCount.Normal}</strong>
+            <span>Normal</span>
+            <small>Routine monitoring</small>
+        </div>
+    `;
+}
 
         document.getElementById(
             "bars"
@@ -1000,7 +1065,7 @@ function dashboard() {
             "recent"
         ).innerHTML =
 
-            data
+            sortedData
                 .slice(0, 4)
                 .map(
                     item => `
