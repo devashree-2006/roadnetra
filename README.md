@@ -1,12 +1,34 @@
 # RoadNetra
 
-A frontend-only civic-tech prototype for reporting road damage. It uses plain HTML, CSS, JavaScript, and browser localStorage—no installation or backend required.
+RoadNetra is a road-damage reporting website.
 
+Users can report potholes, cracked roads, waterlogging, and other road problems. Each report gets a complaint ID that can be used to track its status.
 
-## Pages
+## Features
 
-- `index.html` — landing page and live summary
-- `report.html` — damage reporting form with photo preview
-- `complaints.html` — searchable reports with status progression controls
-- `track.html` — complaint ID tracker
-- `dashboard.html` — report statistics
+- Report road damage
+- Image preview
+- Complaint ID generation
+- Track complaint status
+- Search and filter complaints
+- Dashboard statistics
+- Admin login for status updates
+- Data saved using localStorage
+
+## Technologies
+
+- HTML
+- CSS
+- JavaScript
+- localStorage
+
+## Run the Project
+
+Open `index.html` in a browser.
+
+## Admin Login
+
+```text
+Username: roadnetra_admin
+Password: admin123
+```
