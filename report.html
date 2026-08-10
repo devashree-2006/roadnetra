@@ -9,72 +9,172 @@
 </head>
 
 <body>
+
     <header>
-        <a class="brand" href="index.html"><b>RN</b><span>RoadNetra<small>See. Report. Improve.</small></span></a>
+        <a class="brand" href="index.html">
+            <b>RN</b>
+            <span>
+                RoadNetra
+                <small>See. Report. Improve.</small>
+            </span>
+        </a>
+
         <nav>
-            <a href="index.html">Home</a><a class="active" href="report.html">Report Damage</a>
-            <a href="complaints.html">Complaints</a><a href="track.html">Track</a><a href="dashboard.html">Dashboard</a>
+            <a href="index.html">Home</a>
+            <a class="active" href="report.html">Report Damage</a>
+            <a href="complaints.html">Complaints</a>
+            <a href="track.html">Track</a>
+            <a href="dashboard.html">Dashboard</a>
         </nav>
     </header>
 
     <main class="page">
+
         <p class="eyebrow">CITIZEN REPORT</p>
+
         <h1>Tell us what needs attention.</h1>
-        <p class="muted">Submit the details below and receive a complaint ID for tracking.</p>
+
+        <p class="muted">
+            Submit the details below and receive a complaint ID for tracking.
+        </p>
 
         <form id="reportForm" class="form-grid">
+
+            <!-- ========================= -->
+            <!-- DAMAGE DETAILS -->
+            <!-- ========================= -->
+
             <section class="card">
+
                 <h2>What did you see?</h2>
 
                 <label class="upload">
-          <input id="photo" type="file" accept="image/*">
-          <img id="preview" alt="Preview">
-          <span id="uploadText">＋ Add a photo<br><small>JPG, PNG or WEBP — optional</small></span>
-        </label>
+                    <input id="photo" type="file" accept="image/*">
 
-                <label>Damage type
-          <select name="type">
-            <option>Pothole</option>
-            <option>Cracked road</option>
-            <option>Waterlogging</option>
-            <option>Damaged road surface</option>
-            <option>Other hazard</option>
-          </select>
-        </label>
+                    <img id="preview" alt="Preview">
 
-                <label>Severity
-          <select name="severity">
-            <option>Low</option><option selected>Medium</option><option>High</option>
-          </select>
-        </label>
+                    <span id="uploadText">
+                        ＋ Add a photo<br>
+                        <small>JPG, PNG or WEBP — optional</small>
+                    </span>
+                </label>
 
-                <label>Description
-          <textarea name="description" required placeholder="Describe the road damage..."></textarea>
-        </label>
+                <label>
+                    Damage type
+
+                    <select name="type">
+                        <option>Pothole</option>
+                        <option>Cracked road</option>
+                        <option>Waterlogging</option>
+                        <option>Damaged road surface</option>
+                        <option>Other hazard</option>
+                    </select>
+                </label>
+
+                <label>
+                    Severity
+
+                    <select name="severity">
+                        <option>Low</option>
+                        <option selected>Medium</option>
+                        <option>High</option>
+                    </select>
+                </label>
+
+                <label>
+                    Description
+
+                    <textarea
+                        name="description"
+                        required
+                        placeholder="Describe the road damage..."
+                    ></textarea>
+                </label>
+
             </section>
+
+
+            <!-- ========================= -->
+            <!-- LOCATION -->
+            <!-- ========================= -->
 
             <section class="card">
+
                 <h2>Where is it?</h2>
 
-                <label>Area / landmark
-          <input name="location" required placeholder="e.g. Near City Library, MG Road">
-        </label>
+                <p class="muted">
+                    You can enter the location manually, use GPS, or use both.
+                </p>
 
-                <label>City
-          <input name="city" required placeholder="e.g. Bengaluru">
-        </label>
 
-                <label>PIN code
-          <input name="pin" required pattern="[0-9]{6}" placeholder="6-digit PIN code">
-        </label>
+                <!-- MANUAL LOCATION -->
 
-                <div class="note">📍 Use a nearby landmark so the report is easy to find.</div>
-                <button class="btn dark wide">Submit report →</button>
+                <label>
+                    Area / landmark
+
+                    <input
+                        name="location"
+                        placeholder="e.g. Near City Library, MG Road"
+                    >
+                </label>
+
+
+                <label>
+                    City
+
+                    <input
+                        name="city"
+                        placeholder="e.g. Bengaluru"
+                    >
+                </label>
+
+
+                <label>
+                    PIN code
+
+                    <input
+                        name="pin"
+                        pattern="[0-9]{6}"
+                        placeholder="6-digit PIN code"
+                    >
+                </label>
+
+
+                <!-- GPS -->
+
+                <div class="note">
+                    📍 Prefer automatic location? Use GPS below.
+                </div>
+
+                <button type="button" class="btn dark wide" id="getLocationBtn">
+                    📍 Use My Current Location
+                </button>
+
+                <p id="locationStatus" class="muted"></p>
+
+
+                <!-- Hidden GPS values -->
+
+                <input type="hidden" name="latitude" id="latitude">
+
+                <input type="hidden" name="longitude" id="longitude">
+
+
+                <!-- SUBMIT -->
+
+                <button type="submit" class="btn dark wide">
+                    Submit report →
+                </button>
+
             </section>
+
         </form>
+
     </main>
 
+
     <script src="js/app.js"></script>
+
 </body>
 
 </html>
