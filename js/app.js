@@ -99,13 +99,32 @@ function logout() {
 // ======================================================
 
 function tag(text) {
-
     return `<span class="${text
         .toLowerCase()
         .replaceAll(" ", "-")}">${text}</span>`;
 }
 
+function getPriority(severity, confirmations = 1) {
 
+    if (severity === "High") {
+        return "Critical";
+    }
+
+    if (severity === "Medium") {
+
+        if (confirmations >= 5) {
+            return "Critical";
+        }
+
+        return "High";
+    }
+
+    if (confirmations >= 5) {
+        return "High";
+    }
+
+    return "Normal";
+}
 // ======================================================
 // HOME PAGE
 // ======================================================
@@ -243,22 +262,30 @@ function renderComplaints() {
                             </p>
 
                             <p class="small">
-                                ${tag(item.severity)}
-                                · Reported ${item.date}
-                            </p>
-
+    ${tag(item.severity)}
+    · Priority: <strong>${item.priority || getPriority(item.severity)}</strong>
+    · 👥 ${item.confirmations || 1} citizen${(item.confirmations || 1) === 1 ? "" : "s"} confirmed
+    · Reported ${item.date}
+</p>
                         </div>
 
 
                         <div>
 
-                            ${tag(item.status)}
+    ${tag(item.status)}
 
-                            <br>
+    <br>
 
-                            ${adminControls}
+    ${adminControls}
 
-                        </div>
+    <button
+        class="confirm-btn"
+        data-id="${item.id}"
+    >
+        👍 I'm facing this too
+    </button>
+
+</div>
 
                     </article>
                 `;
@@ -271,6 +298,61 @@ function renderComplaints() {
                 No reports found.
             </div>`;
 
+            document
+    .querySelectorAll(".confirm-btn")
+    .forEach(button => {
+
+        button.onclick = () => {
+
+            const reportId = button.dataset.id;
+
+            // Get complaints already confirmed by this browser
+            const confirmedReports =
+                JSON.parse(
+                    localStorage.getItem("roadnetra_confirmed") || "[]"
+                );
+
+            // Prevent duplicate confirmation
+            if (confirmedReports.includes(reportId)) {
+
+                alert("You have already confirmed this issue.");
+
+                return;
+            }
+
+            const data = reports();
+
+            const item = data.find(
+                report => report.id === reportId
+            );
+
+            if (!item) return;
+
+            // Increase confirmation count
+            item.confirmations =
+                (item.confirmations || 1) + 1;
+
+            // Recalculate priority
+            item.priority =
+                getPriority(
+                    item.severity,
+                    item.confirmations
+                );
+
+            // Remember this confirmation
+            confirmedReports.push(reportId);
+
+            localStorage.setItem(
+                "roadnetra_confirmed",
+                JSON.stringify(confirmedReports)
+            );
+
+            save(data);
+
+            draw();
+        };
+
+    });
 
         document
             .querySelectorAll(".status-select")
@@ -455,51 +537,47 @@ function setupReportForm() {
 
         const report = {
 
-            id: id,
+    id: id,
 
-            type:
-                formData.get("type"),
+    type:
+        formData.get("type"),
 
-            severity:
-                formData.get("severity"),
+    severity:
+        formData.get("severity"),
 
+    priority:
+        getPriority(formData.get("severity")),
 
-            // Manual location
-            location:
-                manualLocation ||
-                "GPS Location",
+    confirmations: 1,
 
+    location:
+        manualLocation ||
+        "GPS Location",
 
-            city:
-                city ||
-                "Location detected by GPS",
+    city:
+        city ||
+        "Location detected by GPS",
 
+    pin:
+        pin || "",
 
-            pin:
-                pin || "",
+    description:
+        formData.get("description"),
 
+    latitude:
+        latitude || "",
 
-            description:
-                formData.get("description"),
+    longitude:
+        longitude || "",
 
+    status:
+        "Pending",
 
-            // GPS coordinates
-            latitude:
-                latitude || "",
-
-            longitude:
-                longitude || "",
-
-
-            status:
-                "Pending",
-
-
-            date:
-                new Date()
-                    .toISOString()
-                    .slice(0, 10)
-        };
+    date:
+        new Date()
+            .toISOString()
+            .slice(0, 10)
+};
 
 
         // ==============================================
