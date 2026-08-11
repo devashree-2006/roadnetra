@@ -30,5 +30,5 @@ Open `index.html` in a browser.
 
 ```text
 Username: roadnetra_admin
-Password: admin123
+Password: rn_admin
 ```
