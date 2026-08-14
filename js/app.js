@@ -763,7 +763,7 @@ function setupGPS() {
 
                 {
                     enableHighAccuracy: true,
-                    timeout: 10000,
+                    timeout: 30000,
                     maximumAge: 0
                 }
             );
@@ -833,9 +833,24 @@ function setupTracker() {
                 </h2>
 
                 <p class="muted">
-                    ${item.location},
-                    ${item.city}
-                </p>
+    ${item.location},
+    ${item.city}
+</p>
+
+${
+    item.latitude && item.longitude
+    ? `
+        <a
+            href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="map-link"
+        >
+            📍 View exact location on Google Maps
+        </a>
+      `
+    : ""
+}
 
                 <p>
                     ${tag(item.status)}
