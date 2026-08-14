@@ -267,12 +267,24 @@ ${
         <a
             href="https://www.google.com/maps?q=${item.latitude},${item.longitude}"
             target="_blank"
+            rel="noopener noreferrer"
             class="map-link"
         >
-            📍 View exact location on map
+            📍 View exact location on Google Maps
         </a>
       `
-    : ""
+    : `
+        <a
+            href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                `${item.location}, ${item.city}, ${item.pin}`
+            )}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="map-link"
+        >
+            📍 View location on Google Maps
+        </a>
+      `
 }
 
                             <p class="small">
