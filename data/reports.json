@@ -1,0 +1,47 @@
+[
+  {
+    "id": "RN-2026-A7K29M",
+    "type": "Pothole",
+    "severity": "High",
+    "priority": "Critical",
+    "confirmations": 1,
+    "location": "Near City Library, MG Road",
+    "city": "Bengaluru",
+    "pin": "560001",
+    "description": "Large pothole near the bus stop.",
+    "latitude": "",
+    "longitude": "",
+    "status": "Under Inspection",
+    "date": "2026-08-06"
+  },
+  {
+    "id": "RN-2026-Q4N81B",
+    "type": "Cracked road",
+    "severity": "Medium",
+    "priority": "High",
+    "confirmations": 1,
+    "location": "Lake View Junction",
+    "city": "Bengaluru",
+    "pin": "560038",
+    "description": "Road surface is cracked across one lane.",
+    "latitude": "",
+    "longitude": "",
+    "status": "Work Started",
+    "date": "2026-08-04"
+  },
+  {
+    "id": "RN-2026-P9T36R",
+    "type": "Waterlogging",
+    "severity": "Low",
+    "priority": "Normal",
+    "confirmations": 1,
+    "location": "Market Road",
+    "city": "Bengaluru",
+    "pin": "560002",
+    "description": "Water collects after rainfall.",
+    "latitude": "",
+    "longitude": "",
+    "status": "Completed",
+    "date": "2026-08-01"
+  }
+]
